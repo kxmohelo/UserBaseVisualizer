@@ -11,16 +11,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class UserBaseGraphTest {
-    static SortedMap<String, Integer> data;
-    UserBaseGraph userBaseGraph = new UserBaseGraph();
+    private static SortedMap<String, Integer> data;
+    private UserBaseGraph userBaseGraph = new UserBaseGraph();
 
     @BeforeAll
     static void setData() {
-        data = new TreeMap<>();
+        UserBaseGraphTest.data = new TreeMap<>();
 
-        data.put("01-01-2022", 300);
-        data.put("02-01-2022", 500);
-        data.put("03-01-2022", 700);
+        UserBaseGraphTest.data.put("01-01-2022", 300);
+        UserBaseGraphTest.data.put("02-01-2022", 500);
+        UserBaseGraphTest.data.put("03-01-2022", 700);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class UserBaseGraphTest {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         System.setOut(new PrintStream(os));
 
-        userBaseGraph.drawGraph(data);
+        this.userBaseGraph.drawGraph(UserBaseGraphTest.data);
 
         assertEquals(output, os.toString().trim());
         System.setOut(console);
@@ -61,7 +61,7 @@ public class UserBaseGraphTest {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         System.setOut(new PrintStream(os));
 
-        userBaseGraph.drawGraphByDate(data, "01-01-2022");
+        this.userBaseGraph.drawGraphByDate(UserBaseGraphTest.data, "01-01-2022");
 
         assertEquals(output, os.toString().trim());
         System.setOut(console);
@@ -83,7 +83,7 @@ public class UserBaseGraphTest {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         System.setOut(new PrintStream(os));
 
-        userBaseGraph.drawGraphByPeriod(data, "02-01-2022", "03-01-2022");
+        this.userBaseGraph.drawGraphByPeriod(UserBaseGraphTest.data, "02-01-2022", "03-01-2022");
 
         assertEquals(output, os.toString().trim());
         System.setOut(console);

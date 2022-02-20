@@ -15,7 +15,7 @@ public class UserBaseGraph {
      * @param data the data used for graphing
      */
     public void drawGraph(SortedMap<String, Integer> data) {
-        setTerm(data.values().toArray(new Integer[0]));
+        this.setTerm(data.values().toArray(new Integer[0]));
 
         System.out.println("\n" + "===".repeat(40));
 
@@ -28,7 +28,7 @@ public class UserBaseGraph {
 
         String line;
         for (int i = 0; i < data.size(); i++) {
-            line = " " + dates[i] + ": " + createBarByUserActivity(users[i]) + " " + users[i];
+            line = " " + dates[i] + ": " + this.createBarByUserActivity(users[i]) + " " + users[i];
             System.out.println(line);
         }
 
@@ -41,7 +41,7 @@ public class UserBaseGraph {
      * @param date Date used to filter the data
      */
     public void drawGraphByDate(SortedMap<String, Integer> data, String date) {
-        if (!date.matches("^(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])-[0-9]{4}$")) {
+        if (!this.dateIsValid(date)) {
             throw new IllegalArgumentException("Invalid date format string. See --help");
         } else if (!data.containsKey(date)) {
             throw new IllegalArgumentException("Date '" + date + "' does not exist");
@@ -61,8 +61,7 @@ public class UserBaseGraph {
      * @param endDate Date used to filter the data as upper limit
      */
     public void drawGraphByPeriod(SortedMap<String, Integer> data, String startDate, String endDate) {
-        if (!startDate.matches("^(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])-[0-9]{4}$") ||
-        !endDate.matches("^(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])-[0-9]{4}$")) {
+        if (!this.dateIsValid(startDate) || !this.dateIsValid(endDate)) {
             throw new IllegalArgumentException("Invalid date format string. See --help");
         }
         else if (!data.containsKey(startDate) || !data.containsKey(endDate)) {
@@ -88,10 +87,9 @@ public class UserBaseGraph {
      * @param userActivity The array containing the number of user activity in the data
      * @return The term for each of each interval
      */
-    private double setTerm(Integer[] userActivity) {
+    private void setTerm(Integer[] userActivity) {
         double max = Collections.max(List.of(userActivity));
-        term = max / 100.0;
-        return term;
+        this.term = max / 100.0;
     }
 
 
@@ -103,11 +101,11 @@ public class UserBaseGraph {
     private String createBarByUserActivity(double userActivity) {
         String bar = "";
 
-        if ((int)userActivity / (int)term > 0) {
-            bar += typeOfBars[7].repeat((int)userActivity / (int)term);
+        if ((int)userActivity / (int)this.term > 0) {
+            bar += this.typeOfBars[7].repeat((int)userActivity / (int)this.term);
 
-            while (userActivity > term) {
-                userActivity -= term;
+            while (userActivity > this.term) {
+                userActivity -= this.term;
             }
         }
         else if (userActivity != 0) {
@@ -115,14 +113,27 @@ public class UserBaseGraph {
             double i = 0.125;
             int barIndex = 0;
 
-            while (userActivity >= (term * i) && i < 1.0) {
+            while (userActivity >= (this.term * i) && i < 1.0) {
                 barIndex++;
                 i += 0.125;
             }
 
-            bar += typeOfBars[barIndex];
+            bar += this.typeOfBars[barIndex];
         }
 
         return bar;
+    }
+
+    /**
+     * Checks if date is valid
+     * Added because I got "Invalid date format string. See --help"
+     * for ....-p '01-01-2022' '13-01-2022'
+     * @param date The number of user activity
+     * @return boolean saying of date is valid
+     * NB: didn't want to over complicate and cater for lots of date (just wanted to test),
+     * so assumes day and month are passed as 2 characters
+     */
+    private boolean dateIsValid(String date){
+        return date.matches("^([0-9]|0[1-9]){2,}-(3[01]|[12][0-9]|0[1-9])-[0-9]{4}$");
     }
 }
