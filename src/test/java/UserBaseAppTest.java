@@ -11,7 +11,7 @@ public class UserBaseAppTest {
     final PrintStream originalErr = System.err;
     final ByteArrayOutputStream out = new ByteArrayOutputStream();
     final ByteArrayOutputStream err = new ByteArrayOutputStream();
-    String output;
+    private String output;
 
     @BeforeEach
     public void setUpStreams() {
@@ -23,13 +23,13 @@ public class UserBaseAppTest {
 
     @AfterEach
     public void restoreStreams() {
-        System.setOut(originalOut);
-        System.setErr(originalErr);
+        System.setOut(this.originalOut);
+        System.setErr(this.originalErr);
     }
 
     @Test
     void testHelpOption() {
-        output = "Usage: ubv [-hV] -t=<targetPath> [-p=<\"dd-MM-yyyy\"> [<\"dd-MM-yyyy\">]]...\n" +
+        this.output = "Usage: ubv [-hV] -t=<targetPath> [-p=<\"dd-MM-yyyy\"> [<\"dd-MM-yyyy\">]]...\n" +
                 "User-Base Visualiser\n" +
                 "  -p, --period=<\"dd-MM-yyyy\"> [<\"dd-MM-yyyy\">]\n" +
                 "                  The date or dates used to filter the data by\n" +
@@ -39,7 +39,7 @@ public class UserBaseAppTest {
                 "  -V, --version   Print version information and exit.";
 
         new CommandLine(new UserBaseApp()).execute("-h");
-        assertEquals(output, out.toString().trim());
+        assertEquals(this.output, out.toString().trim());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class UserBaseAppTest {
 
     @Test
     void testTargetOptionValid() {
-        String output = "========================================================================================================================\n" +
+        this.output = "========================================================================================================================\n" +
                 "\n" +
                 "\t\t\t\t\t\t\t\t\t\t\tNumber of Active Users by Date\n" +
                 "========================================================================================================================\n" +
@@ -75,12 +75,12 @@ public class UserBaseAppTest {
 
         new CommandLine(new UserBaseApp())
                 .execute("-t", "http://sam-user-activity.eu-west-1.elasticbeanstalk.com/");
-        assertEquals(output, out.toString().trim());
+        assertEquals(this.output, out.toString().trim());
     }
 
     @Test
     void testTargetOptionInvalidCaseOne() {
-        output = "Missing required parameter for option '--target' (<targetPath>)\n" +
+        this.output = "Missing required parameter for option '--target' (<targetPath>)\n" +
                 "Usage: ubv [-hV] -t=<targetPath> [-p=<\"dd-MM-yyyy\"> [<\"dd-MM-yyyy\">]]...\n" +
                 "User-Base Visualiser\n" +
                 "  -p, --period=<\"dd-MM-yyyy\"> [<\"dd-MM-yyyy\">]\n" +
@@ -91,7 +91,7 @@ public class UserBaseAppTest {
                 "  -V, --version   Print version information and exit.";
 
         new CommandLine(new UserBaseApp()).execute("-t");
-        assertEquals(output, err.toString().trim());
+        assertEquals(this.output, err.toString().trim());
     }
 
     @Test
@@ -102,7 +102,7 @@ public class UserBaseAppTest {
 
     @Test
     void testPeriodOptionValidCaseOne() {
-        output = "========================================================================================================================\n" +
+        this.output = "========================================================================================================================\n" +
                 "\n" +
                 "\t\t\t\t\t\t\t\t\t\t\tNumber of Active Users by Date\n" +
                 "========================================================================================================================\n" +
@@ -113,12 +113,12 @@ public class UserBaseAppTest {
         
         new CommandLine(new UserBaseApp())
                 .execute("-t", "http://sam-user-activity.eu-west-1.elasticbeanstalk.com/", "-p", "01-01-2022");
-        assertEquals(output, out.toString().trim());
+        assertEquals(this.output, out.toString().trim());
     }
 
     @Test
     void testPeriodOptionCaseTwo() {
-        output = "========================================================================================================================\n" +
+        this.output = "========================================================================================================================\n" +
                 "\n" +
                 "\t\t\t\t\t\t\t\t\t\t\tNumber of Active Users by Date\n" +
                 "========================================================================================================================\n" +
@@ -136,7 +136,7 @@ public class UserBaseAppTest {
         new CommandLine(new UserBaseApp())
                 .execute("-t", "http://sam-user-activity.eu-west-1.elasticbeanstalk.com/","-p", "01-01-2022",
                 "07-01-2022");
-        assertEquals(output, out.toString().trim());
+        assertEquals(this.output, out.toString().trim());
     }
 
     @Test

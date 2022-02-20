@@ -44,7 +44,7 @@ public class UserBaseApp implements Runnable {
         this.client = new UserBaseClient();
         this.userBaseGraph = new UserBaseGraph();
         try {
-            client.start();
+            this.client.start();
         } catch (Exception ex) {
             System.out.println("Failed to start client");
         }
@@ -53,20 +53,20 @@ public class UserBaseApp implements Runnable {
     @Override
     public void run() {
         try {
-            client.makeRequest(targetPath);
-            SortedMap<String, Integer> data = client.getContentAsMap();
+            this.client.makeRequest(targetPath);
+            SortedMap<String, Integer> data = this.client.getContentAsMap();
 
-            if (dates != null) {
-                if (dates.length == 1) {
-                    userBaseGraph.drawGraphByDate(data, dates[0]);
-                } else if (dates.length == 2) {
-                    userBaseGraph.drawGraphByPeriod(data, dates[0], dates[1]);
+            if (this.dates != null) {
+                if (this.dates.length == 1) {
+                    this.userBaseGraph.drawGraphByDate(data, this.dates[0]);
+                } else if (this.dates.length == 2) {
+                    this.userBaseGraph.drawGraphByPeriod(data, this.dates[0], this.dates[1]);
                 }
             } else {
-                userBaseGraph.drawGraph(data);
+                this.userBaseGraph.drawGraph(data);
             }
 
-            client.stop();
+            this.client.stop();
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());

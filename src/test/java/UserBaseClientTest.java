@@ -8,33 +8,33 @@ import java.util.SortedMap;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserBaseClientTest {
-    UserBaseClient client = new UserBaseClient();
+    private UserBaseClient client = new UserBaseClient();
 
     @BeforeEach
     void startClient() throws Exception {
-        client.start();
+        this.client.start();
     }
 
     @AfterEach
     void stopClient() throws Exception {
-        client.stop();
+        this.client.stop();
     }
 
     @Test
     void testStart() {
-        assertTrue(client.isConnected());
+        assertTrue(this.client.isConnected());
     }
 
     @Test
     void testStop() throws Exception {
-        client.stop();
+        this.client.stop();
 
-        assertFalse(client.isConnected());
+        assertFalse(this.client.isConnected());
     }
 
     @Test
     void testMakeRequest() throws Exception {
-        ContentResponse res = client.makeRequest("http://sam-user-activity.eu-west-1.elasticbeanstalk.com/");
+        ContentResponse res = this.client.makeRequest("http://sam-user-activity.eu-west-1.elasticbeanstalk.com/");
 
         assertEquals(res.getStatus(), 200);
     }
